@@ -79,6 +79,20 @@ return {
     },
   },
 
+  -- Opens up a sidebar with all the project's java dependencies
+  -- similar functionality to vscode's: https://github.com/microsoft/vscode-java-dependency
+  {
+    "g0ne150/java-deps.nvim",
+    dependencies = {
+      "folke/snacks.nvim",
+      {
+        "mason-org/mason.nvim",
+        opts = { ensure_installed = { "vscode-java-dependency" } },
+      },
+    },
+    config = function() end,
+  },
+
   -- Set up nvim-jdtls to attach to java files.
   {
     "mfussenegger/nvim-jdtls",
@@ -155,6 +169,13 @@ return {
           if opts.test and mason_registry.is_installed("java-test") then
             vim.list_extend(bundles, vim.fn.glob("$MASON/share/java-test/*.jar", false, true))
           end
+        end
+
+        if mason_registry.is_installed("vscode-java-dependency") then
+          vim.list_extend(
+            bundles,
+            vim.fn.glob("$MASON/share/vscode-java-dependency/com.microsoft.jdtls.ext.core-*.jar", false, true)
+          )
         end
       end
       local function attach_jdtls()
